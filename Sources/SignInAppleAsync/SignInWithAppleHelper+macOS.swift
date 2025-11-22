@@ -22,7 +22,7 @@ public final class SignInWithAppleHelper: NSObject {
     ///
     /// - Parameter viewController: ViewController to present OS modal on. If nil, function will attempt to find the top-most ViewController. Throws an error if no ViewController is found.
     public func signIn(viewController: NSViewController? = nil) async throws -> SignInWithAppleResult {
-        for try await response in startSignInWithAppleFlow() {
+        for try await response in startSignInWithAppleFlow(viewController: viewController) {
             return response
         }
         
@@ -31,7 +31,7 @@ public final class SignInWithAppleHelper: NSObject {
 
     private func startSignInWithAppleFlow(viewController: NSViewController? = nil) -> AsyncThrowingStream<SignInWithAppleResult, Error> {
         AsyncThrowingStream { continuation in
-            startSignInWithAppleFlow { result in
+            startSignInWithAppleFlow(viewController: viewController) { result in
                 switch result {
                 case .success(let signInWithAppleResult):
                     continuation.yield(signInWithAppleResult)
